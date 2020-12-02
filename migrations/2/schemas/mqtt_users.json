@@ -1,0 +1,25 @@
+{
+  "title": "users",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "userName": {
+        "type": "string"
+      },
+      "password": {
+        "type": "string"
+      },
+      "superuser": {
+        "type": "string"
+      },
+      "acls": {
+        "type": "string"
+      },
+      "email": {
+        "type": "string"
+      }
+    },
+    "required": ["userName", "password", "superuser"]
+  }
+}

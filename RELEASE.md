@@ -1,3 +1,6 @@
+# 0.0.3
+- Added mqtt schemas (auth user and acl)
+
 # 0.0.2
 - Second version of linto-platform-mongodb-migration service
 

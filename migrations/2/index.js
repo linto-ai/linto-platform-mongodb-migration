@@ -5,7 +5,9 @@ const schemas = {
     flowTmp: require('./schemas/flow_tmp.json'),
     users: require('./schemas/users.json'),
     workflowsStatic: require('./schemas/workflows_static.json'),
-    workflowsTemplates: require('./schemas/workflows_templates.json')
+    workflowsTemplates: require('./schemas/workflows_templates.json'),
+    mqtt_acls: require('./schemas/mqtt_acls.json'),
+    mqtt_users: require('./schemas/mqtt_users.json'),
 }
 
 class Migrate extends MongoMigration {
@@ -47,7 +49,7 @@ class Migrate extends MongoMigration {
                             errors: schemaValid.errors
                         })
                     }
-                } else  { // collection exist but empty
+                } else { // collection exist but empty
                     const payload = {
                         id: "tmp",
                         flow: [],
@@ -210,6 +212,42 @@ class Migrate extends MongoMigration {
                 })
             }
 
+
+            /************************/
+            /* MQTT AUTH COLLECTION */
+            /************************/
+            if (collectionNames.indexOf('mqtt_users') >= 0) { // collection exist
+                const mqtt_users = await this.mongoRequest('mqtt_users', {})
+                if (mqtt_users.length > 0) { // collection exist and not empty
+                    const schemaValid = this.testSchema(mqtt_users, schemas.mqtt_users)
+                    if (!schemaValid.valid) { // schema is invalid
+                        // Add errors to migrationErrors array
+                        migrationErrors.push({
+                            collectionName: 'mqtt_users',
+                            errors: schemaValid.errors
+                        })
+                    }
+                }
+            }
+
+            if (collectionNames.indexOf('mqtt_acls') >= 0) { // collection exist
+                const mqtt_acls = await this.mongoRequest('mqtt_acls', {})
+                if (mqtt_acls.length > 0) { // collection exist and not empty
+                    const schemaValid = this.testSchema(mqtt_acls, schemas.mqtt_acls)
+                    if (!schemaValid.valid) { // schema is invalid
+                        // Add errors to migrationErrors array
+                        migrationErrors.push({
+                            collectionName: 'mqtt_acls',
+                            errors: schemaValid.errors
+                        })
+                    }
+                }
+            } else {
+                await this.mongoInsert('mqtt_acls', { topic: '+/tolinto/%u/#', acc: 3 })
+                await this.mongoInsert('mqtt_acls', { topic: '+/fromlinto/%u/#', acc: 3 })
+            }
+
+
             /**************************/
             /* REMOVE OLD COLLECTIONS */
             /**************************/
@@ -242,7 +280,7 @@ class Migrate extends MongoMigration {
             }
         } catch (error) {
             console.error(error)
-            if (typeof(error) === 'object' && error.length > 0) {
+            if (typeof (error) === 'object' && error.length > 0) {
                 console.error('======== Migration ERROR ========')
                 error.map(err => {
                     if (!!err.collectionName && !!err.errors) {
