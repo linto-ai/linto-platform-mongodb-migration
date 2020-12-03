@@ -4,7 +4,7 @@
   "items": {
     "type": "object",
     "properties": {
-      "userName": {
+      "username": {
         "type": "string"
       },
       "password": {
@@ -20,6 +20,6 @@
         "type": "string"
       }
     },
-    "required": ["userName", "password", "superuser"]
+    "required": ["username", "password", "superuser"]
   }
 }
