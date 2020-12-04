@@ -11,10 +11,10 @@
         "type": "string"
       },
       "superuser": {
-        "type": "string"
+        "type": "boolean"
       },
       "acls": {
-        "type": "string"
+        "type": "array"
       },
       "email": {
         "type": "string"
