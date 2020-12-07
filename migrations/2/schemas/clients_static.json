@@ -12,15 +12,33 @@
                 "enum": ["offline", "online"]
             },
             "last_up": {
-                "type": ["string", "null"],
-                "format": "date-time"
+                "anyOf": [{
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    {
+                        "type": "null"
+                    }
+                ]
             },
             "last_down": {
-                "type": ["string", "null"],
-                "format": "date-time"
+                "anyOf": [{
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    {
+                        "type": "null"
+                    }
+                ]
             },
             "associated_workflow": {
-                "type": ["object", "null"]
+                "anyOf": [{
+                        "type": "object"
+                    },
+                    {
+                        "type": "null"
+                    }
+                ]
             },
             "sn": {
                 "type": "string"
