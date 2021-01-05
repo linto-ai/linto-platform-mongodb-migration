@@ -216,6 +216,9 @@ class Migrate extends MongoMigration {
             /************************/
             /* MQTT AUTH COLLECTION */
             /************************/
+            // Allways remove mqtt_user at the start
+            if (collectionNames.indexOf('mqtt_users') >= 0) await this.mongoDrop('mqtt_users')
+
             if (collectionNames.indexOf('mqtt_users') >= 0) { // collection exist
                 const mqtt_users = await this.mongoRequest('mqtt_users', {})
                 if (mqtt_users.length > 0) { // collection exist and not empty
@@ -251,24 +254,13 @@ class Migrate extends MongoMigration {
             /**************************/
             /* REMOVE OLD COLLECTIONS */
             /**************************/
-            if (collectionNames.indexOf('context_types') >= 0) { // collection exist
-                await this.mongoDrop('context_types')
-            }
-            if (collectionNames.indexOf('context') >= 0) { // collection exist
-                await this.mongoDrop('context')
-            }
-            if (collectionNames.indexOf('flow_pattern_tmp') >= 0) { // collection exist
-                await this.mongoDrop('flow_pattern_tmp')
-            }
-            if (collectionNames.indexOf('flow_pattern') >= 0) { // collection exist
-                await this.mongoDrop('flow_pattern')
-            }
-            if (collectionNames.indexOf('lintos') >= 0) { // collection exist
-                await this.mongoDrop('lintos')
-            }
-            if (collectionNames.indexOf('linto_users') >= 0) { // collection exist
-                await this.mongoDrop('linto_users')
-            }
+            // Remove if collection exist
+            if (collectionNames.indexOf('context_types') >= 0) await this.mongoDrop('context_types')
+            if (collectionNames.indexOf('context') >= 0) await this.mongoDrop('context')
+            if (collectionNames.indexOf('flow_pattern_tmp') >= 0) await this.mongoDrop('flow_pattern_tmp')
+            if (collectionNames.indexOf('flow_pattern') >= 0) await this.mongoDrop('flow_pattern')
+            if (collectionNames.indexOf('lintos') >= 0) await this.mongoDrop('lintos')
+            if (collectionNames.indexOf('linto_users') >= 0) await this.mongoDrop('linto_users')
 
             // RETURN
             if (migrationErrors.length > 0) {
@@ -304,21 +296,13 @@ class Migrate extends MongoMigration {
             collections.map(col => {
                 collectionNames.push(col.name)
             })
-            if (collectionNames.indexOf('clients_static') >= 0) { // collection exist
-                await this.mongoDrop('clients_static')
-            }
-            if (collectionNames.indexOf('db_version') >= 0) { // collection exist
-                await this.mongoDrop('db_version')
-            }
-            if (collectionNames.indexOf('flow_tmp') >= 0) { // collection exist
-                await this.mongoDrop('flow_tmp')
-            }
-            if (collectionNames.indexOf('workflows_static') >= 0) { // collection exist
-                await this.mongoDrop('workflows_static')
-            }
-            if (collectionNames.indexOf('workflows_templates') >= 0) { // collection exist
-                await this.mongoDrop('workflows_templates')
-            }
+
+            // Remove if collection exist
+            if (collectionNames.indexOf('clients_static') >= 0) await this.mongoDrop('clients_static')
+            if (collectionNames.indexOf('db_version') >= 0) await this.mongoDrop('db_version')
+            if (collectionNames.indexOf('flow_tmp') >= 0) await this.mongoDrop('flow_tmp')
+            if (collectionNames.indexOf('workflows_static') >= 0) await this.mongoDrop('workflows_static')
+            if (collectionNames.indexOf('workflows_templates') >= 0) await this.mongoDrop('workflows_templates')
 
             return true
         } catch (error) {

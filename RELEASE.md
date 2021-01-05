@@ -1,3 +1,6 @@
+# 0.2.4
+- Added mqtt_user clean on startup
+
 # 0.0.3
 - Added mqtt schemas (auth user and acl)
 
