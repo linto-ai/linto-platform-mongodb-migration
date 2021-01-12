@@ -1,5 +1,3 @@
-const crypto = require('crypto')
-
 const MongoMigration = require(`../../model/migration.js`)
 const schemas = {
     context: require('./schemas/context.json'),
@@ -231,13 +229,6 @@ class Migrate extends MongoMigration {
                         })
                     }
                 }
-            } else {
-                let salt = crypto.randomBytes(16).toString('hex')
-                this.mongoInsert('linto_users', {
-                    "email": process.env.LINTO_STACK_MONGODB_USER_ANDROID_EMAIL,
-                    "salt": salt,
-                    "hash": crypto.pbkdf2Sync(process.env.LINTO_STACK_MONGODB_USER_ANDROID_PASWORD, salt, 10000, 512, 'sha512').toString('hex'),
-                })
             }
 
             // RETURN

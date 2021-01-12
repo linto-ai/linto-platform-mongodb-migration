@@ -14,8 +14,6 @@ services:
     command: # Overrides CMD specified in dockerfile (none here, handled by entrypoint)
       - --run-cmd=npm run migrate
     env_file: .docker_env
-    volumes:
-      - ${LINTO_SHARED_MOUNT}/${LINTO_STACK_MONGODB_SHARED_SCHEMAS}/:/usr/src/app/linto-platform-mongodb-migration/migrations/shared/
     ports:
       - 80:80
 

@@ -30,7 +30,4 @@ done
 echo "RUNNING : $script"
 cd /usr/src/app/linto-platform-mongodb-migration
 
-rm -f /usr/src/app/linto-platform-mongodb-migration/migrations/shared/*.json
-cp -v /usr/src/app/linto-platform-mongodb-migration/migrations/$LINTO_STACK_MONGODB_TARGET_VERSION/schemas/*.json /usr/src/app/linto-platform-mongodb-migration/migrations/shared/
-
 eval "$script"
