@@ -8,6 +8,9 @@ const schemas = {
     workflowsTemplates: require('./schemas/workflows_templates.json'),
     mqtt_acls: require('./schemas/mqtt_acls.json'),
     mqtt_users: require('./schemas/mqtt_users.json'),
+    androidUsers: require('./schemas/android_users.json'),
+    webappHosts: require('./schemas/webapp_hosts.json'),
+    localSkills: require('./schemas/local_skills.json'),
 }
 
 class Migrate extends MongoMigration {
@@ -191,6 +194,60 @@ class Migrate extends MongoMigration {
                 }
             }
 
+            /******************/
+            /* ANDROID_USERS */
+            /*****************/
+            if (collectionNames.indexOf('android_users') >= 0) { // collection exist
+                const androidUsers = await this.mongoRequest('android_users', {})
+                if (androidUsers.length > 0) { // collection exist and not empty
+                    const schemaValid = this.testSchema(androidUsers, schemas.androidUsers)
+
+                    if (!schemaValid.valid) { // schema is invalid
+                        // Add errors to migrationErrors array
+                        migrationErrors.push({
+                            collectionName: 'local_skills',
+                            errors: schemaValid.errors
+                        })
+                    }
+                }
+            }
+
+            /****************/
+            /* WEBAPP_HOSTS */
+            /***************/
+            if (collectionNames.indexOf('webapp_hosts') >= 0) { // collection exist
+                const webappHosts = await this.mongoRequest('webapp_hosts', {})
+                if (webappHosts.length > 0) { // collection exist and not empty
+                    const schemaValid = this.testSchema(webappHosts, schemas.webappHosts)
+
+                    if (!schemaValid.valid) { // schema is invalid
+                        // Add errors to migrationErrors array
+                        migrationErrors.push({
+                            collectionName: 'local_skills',
+                            errors: schemaValid.errors
+                        })
+                    }
+                }
+            }
+
+            /*****************/
+            /* LOCAL_SKILLS */
+            /****************/
+            if (collectionNames.indexOf('local_skills') >= 0) { // collection exist
+                const localSkills = await this.mongoRequest('local_skills', {})
+                if (localSkills.length > 0) { // collection exist and not empty
+                    const schemaValid = this.testSchema(localSkills, schemas.localSkills)
+
+                    if (!schemaValid.valid) { // schema is invalid
+                        // Add errors to migrationErrors array
+                        migrationErrors.push({
+                            collectionName: 'local_skills',
+                            errors: schemaValid.errors
+                        })
+                    }
+                }
+            }
+
             /*************/
             /* DBVERSION */
             /*************/
@@ -272,7 +329,7 @@ class Migrate extends MongoMigration {
             }
         } catch (error) {
             console.error(error)
-            if (typeof (error) === 'object' && error.length > 0) {
+            if (typeof(error) === 'object' && error.length > 0) {
                 console.error('======== Migration ERROR ========')
                 error.map(err => {
                     if (!!err.collectionName && !!err.errors) {
@@ -292,7 +349,6 @@ class Migrate extends MongoMigration {
         try {
             const collections = await this.listCollections()
             const collectionNames = []
-            let migrationErrors = []
             collections.map(col => {
                 collectionNames.push(col.name)
             })
@@ -302,7 +358,13 @@ class Migrate extends MongoMigration {
             if (collectionNames.indexOf('db_version') >= 0) await this.mongoDrop('db_version')
             if (collectionNames.indexOf('flow_tmp') >= 0) await this.mongoDrop('flow_tmp')
             if (collectionNames.indexOf('workflows_static') >= 0) await this.mongoDrop('workflows_static')
+            if (collectionNames.indexOf('workflows_application') >= 0) await this.mongoDrop('workflows_application')
             if (collectionNames.indexOf('workflows_templates') >= 0) await this.mongoDrop('workflows_templates')
+            if (collectionNames.indexOf('local_skills') >= 0) await this.mongoDrop('local_skills')
+            if (collectionNames.indexOf('mqtt_acls') >= 0) await this.mongoDrop('mqtt_acls')
+            if (collectionNames.indexOf('mqtt_users') >= 0) await this.mongoDrop('mqtt_users')
+            if (collectionNames.indexOf('android_users') >= 0) await this.mongoDrop('android_users')
+            if (collectionNames.indexOf('webapp_hosts') >= 0) await this.mongoDrop('webapp_hosts')
 
             return true
         } catch (error) {
