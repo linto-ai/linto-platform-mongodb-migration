@@ -1,3 +1,8 @@
+# 0.2.5
+- 16/02/2021
+- Added local_skills collection
+- Update migration tests (some where missing)
+
 # 0.2.4
 - Added mqtt_user clean on startup
 
