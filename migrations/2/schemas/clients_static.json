@@ -13,23 +13,19 @@
             },
             "last_up": {
                 "anyOf": [{
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    {
-                        "type": "null"
-                    }
-                ]
+                    "type": "string",
+                    "format": "date-time"
+                }, {
+                    "type": "string"
+                }]
             },
             "last_down": {
                 "anyOf": [{
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    {
-                        "type": "null"
-                    }
-                ]
+                    "type": "string",
+                    "format": "date-time"
+                }, {
+                    "type": "string"
+                }]
             },
             "associated_workflow": {
                 "anyOf": [{
