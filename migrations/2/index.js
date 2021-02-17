@@ -205,7 +205,7 @@ class Migrate extends MongoMigration {
                     if (!schemaValid.valid) { // schema is invalid
                         // Add errors to migrationErrors array
                         migrationErrors.push({
-                            collectionName: 'local_skills',
+                            collectionName: 'android_users',
                             errors: schemaValid.errors
                         })
                     }
@@ -223,7 +223,7 @@ class Migrate extends MongoMigration {
                     if (!schemaValid.valid) { // schema is invalid
                         // Add errors to migrationErrors array
                         migrationErrors.push({
-                            collectionName: 'local_skills',
+                            collectionName: 'webapp_hosts',
                             errors: schemaValid.errors
                         })
                     }
