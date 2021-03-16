@@ -6,7 +6,8 @@ const schemas = {
     flow_pattern: require('./schemas/flow_pattern.json'),
     flow_pattern_tmp: require('./schemas/flow_pattern_tmp.json'),
     lintos: require('./schemas/lintos.json'),
-    users: require('./schemas/users.json')
+    users: require('./schemas/users.json'),
+    linto_users: require('./schemas/linto_users.json')
 }
 
 class Migrate extends MongoMigration {
@@ -46,7 +47,7 @@ class Migrate extends MongoMigration {
                             errors: schemaValid.errors
                         })
                     }
-                } else  { // collection exist but empty
+                } else { // collection exist but empty
                     const payload = [
                         { name: 'Fleet' },
                         { name: 'Application' }
@@ -86,7 +87,7 @@ class Migrate extends MongoMigration {
                             errors: schemaValid.errors
                         })
                     }
-                } else  { // collection exist but empty
+                } else { // collection exist but empty
                     const payload = {
                         id: "tmp",
                         flow: [],
@@ -213,6 +214,22 @@ class Migrate extends MongoMigration {
                 })
             }
 
+            /*****************/
+            /* ANDROID_USERS */
+            /*****************/
+            if (collectionNames.indexOf('linto_users') >= 0) { // collection exist
+                const linto_users = await this.mongoRequest('linto_users', {})
+                if (linto_users.length > 0) { // collection exist and not empty
+                    const schemaValid = this.testSchema(linto_users, schemas.linto_users)
+                    if (!schemaValid.valid) { // schema is invalid
+                        // Add errors to migrationErrors array
+                        migrationErrors.push({
+                            collectionName: 'linto_users',
+                            errors: schemaValid.errors
+                        })
+                    }
+                }
+            }
 
             // RETURN
             if (migrationErrors.length > 0) {
@@ -224,7 +241,7 @@ class Migrate extends MongoMigration {
             }
         } catch (error) {
             console.error(error)
-            if (typeof(error) === 'object') {
+            if (typeof (error) === 'object') {
                 console.error('======== Migration ERROR ========')
                 error.map(err => {
                     if (!!err.collectionName && !!err.errors) {

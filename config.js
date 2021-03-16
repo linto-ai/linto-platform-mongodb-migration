@@ -37,6 +37,8 @@ function configureDefaults() {
         dotenv.config()
         const envdefault = dotenv.parse(fs.readFileSync('.envdefault'))
 
+        process.env.LINTO_SHARED_MOUNT = ifHas(process.env.LINTO_SHARED_MOUNT, envdefault.LINTO_SHARED_MOUNT)
+        process.env.LINTO_STACK_MONGODB_SHARED_SCHEMAS = ifHas(process.env.LINTO_STACK_MONGODB_SHARED_SCHEMAS, envdefault.LINTO_STACK_MONGODB_SHARED_SCHEMAS)
         // Database (mongodb)
         process.env.LINTO_STACK_MONGODB_DBNAME = ifHas(process.env.LINTO_STACK_MONGODB_DBNAME, envdefault.LINTO_STACK_MONGODB_DBNAME)
         process.env.LINTO_STACK_MONGODB_SERVICE = ifHas(process.env.LINTO_STACK_MONGODB_SERVICE, envdefault.LINTO_STACK_MONGODB_SERVICE)

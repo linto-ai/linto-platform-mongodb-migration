@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
 
-  migrate:
+  linto-platform-mongodb-migration:
     image: lintoai/linto-platform-mongodb-migration:latest
     networks:
       - internal

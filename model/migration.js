@@ -137,16 +137,14 @@ class MongoMigration {
         })
     }
 
-    async mongoUnset(collection, query, fields) {
+    async mongoDelete(collection, query) {
         return new Promise((resolve, reject) => {
             try {
-                MongoDriver.constructor.db.collection(collection).updateMany(query, {
-                    $unset: fields
-                }, function(error, result) {
+                MongoDriver.constructor.db.collection(collection).deleteOne(query, function(error, result) {
                     if (error) {
                         reject(error)
                     }
-                    resolve('success')
+                    resolve("success")
                 })
             } catch (error) {
                 console.error(error)
@@ -154,12 +152,10 @@ class MongoMigration {
             }
         })
     }
-
-
-    async mongoDelete(collection, query) {
+    async mongoDrop(collection) {
         return new Promise((resolve, reject) => {
             try {
-                MongoDriver.constructor.db.collection(collection).deleteOne(query, function(error, result) {
+                MongoDriver.constructor.db.collection(collection).drop(function(error, result) {
                     if (error) {
                         reject(error)
                     }
